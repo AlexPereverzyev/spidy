@@ -1,0 +1,13 @@
+
+include AUTHORS
+include INSTALL
+include LICENSE
+include README.rst
+recursive-include spidy *.py
+include spidy/VERSION
+recursive-include docs *.rst
+include docs/conf.py
+include docs/make.bat
+include docs/Makefile
+include docs/README
+recursive-include examples *.sp *.spt

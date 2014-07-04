@@ -1,0 +1,46 @@
+
+=============================
+Compiling Spidy Documentation 
+=============================
+
+This file provides basic instructions on how to compile Spidy documentation.
+
+1. Initial Setup 
+================
+
+To compile the documentation you need Sphinx - reStructuredText parser:
+
+http://sphinx-doc.org/tutorial.html
+
+Installing Sphinx using pip Python package manager is easy::
+    
+    pip install sphinx
+    
+If you don't have Sphinx, it can be found here:
+
+https://pypi.python.org/pypi/pip
+
+2. Compile the Documentation
+============================
+
+Compiling documentation is event easier, just run it for the current dir::
+
+    make html
+
+The command will generate HTML documentation in ``_build/html`` dir.
+
+3. View the Documentation
+=========================
+
+To view the documentation in default browser input::
+
+    make htmlview
+    
+Or simply open it using your Web browser.
+
+4. Clean Up
+===========
+
+To cleanup all generated documentation in ``_build/html`` dir, run::
+
+    make clean

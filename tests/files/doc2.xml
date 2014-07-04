@@ -1,0 +1,29 @@
+<root>
+    <p>fruits</p>
+    <div>
+        <div name="first">
+            <p>alpha</p>
+            <p>beta</p>
+            <p>gamma</p>
+        </div>
+        <span name="second">
+            <p>today</p>
+            <p>
+                <span>green</span>
+                <span>red</span>
+                <span>blue</span>
+            </p>
+            <p>tomorrow</p>
+        </span>
+        <table name="third">
+            <span>apple</span>
+            <span class="label">
+                <span>pineapple</span>
+                <div>1</div>                
+                <div>2</div>
+                <div>3</div>
+            </span>
+            <span>lemon</span>
+        </table>
+    </div>
+</root>

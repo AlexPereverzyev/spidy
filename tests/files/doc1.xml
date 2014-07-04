@@ -1,0 +1,8 @@
+<root>
+    <p>fruits</p>
+    <div>
+        <span name="first">apple</span>
+        <span name="second" mark="xxx">orange</span>
+        <span name="third" class="c@stom">mango</span>
+    </div>
+</root>
