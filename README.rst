@@ -5,8 +5,8 @@ Spidy
 .. image:: https://badge.fury.io/py/Spidy.png
    :target: http://badge.fury.io/py/Spidy
 
-.. image:: https://secure.travis-ci.org/Spidy/Spidy.png?branch=master
-   :target: http://travis-ci.org/scrapy/Spidy
+.. image:: https://travis-ci.org/AlexPereverzyev/spidy.svg
+   :target: https://travis-ci.org/AlexPereverzyev/spidy
 
 Overview
 ========
