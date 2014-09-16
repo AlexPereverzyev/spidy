@@ -37,8 +37,8 @@ class Context(object):
     _script = None
     _doc_raw = None                    # raw documnet contents
     _doc = None                        # parsed documnet tag tree
-    _doc_type = None
-    _doc_src = None
+    _doc_type = None                   # document format
+    _doc_src = None                    # specified document source
     _doc_path_ptr = None               # pointer to the current document tree element used as eval start in path nodes
     _return = None                     # script return value is stored here
     _stack = None                      # memory allocations
@@ -88,14 +88,6 @@ class Context(object):
     
     def set_doc_path_ptr(self, doc_path_ptr):
         self._doc_path_ptr = doc_path_ptr
-        
-    def get_branch(self):
-        ''' Returns tags starting from current's doc pointer children.
-            If doc pointer is not set, returns root tags. '''
-        if self._doc_path_ptr != None:
-            return self._doc_path_ptr.get_children()
-        else:
-            return self._doc
         
     def get_return(self):
         return self._return

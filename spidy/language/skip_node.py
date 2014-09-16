@@ -27,14 +27,14 @@ class SkipNode(Node):
         skip &'//div[@id=data_container]'
     '''
     
-    _direction = syntax.SkipDirection.FORWARD
-    _paths = None
+    _path = None
+    _direction = syntax.SkipDirection.FORWARD    
     
     def get_path(self):
-        return self._paths
+        return self._path
     
     def set_path(self, path):
-        self._paths = path
+        self._path = path
 
     def get_direction(self):
         return self._direction
@@ -53,55 +53,22 @@ class SkipNode(Node):
             'SkipNode: document should be of structured format')
         
         # try to parse path, if empty - exit
-        paths = None
-        path_string = ''
-        if self._paths.get_right() != None:    
-            path_string = self._paths.get_right().evaluate()
-            paths = parse_xpath(self._id, self._sline, path_string)
+        xpath = None
+        if self._path.get_right() != None:    
+            exp_string = self._path.get_right().evaluate()
+            xpath = XPath(self._id, self._sline, exp_string)
             
-        if paths == None or len(paths) == 0:
+        if xpath == None or xpath.is_empty():
             return
         
-        tags = None        
-        for path in paths:        
-            for segment in path:
-                
-                if self._direction == syntax.SkipDirection.FORWARD:
-                    if segment.is_current():
-                        break
-                    
-                    if tags == None:
-                        tags = self._context.get_branch()
-                    else:
-                        tags = [c for t in tags for c in t.get_children()]
-                            
-                    for s in segment.get_selectors():
-                        tags = s.filter(tags)
-                        
-                    if tags == None or len(tags) == 0:
-                        tags = None
-                        break
-    
-                else: # self._direction == syntax.SkipDirection.REVERSE:                    
-                    if self._context.get_doc_path_ptr() == None:
-                        break
-                    
-                    if tags == None:
-                        tags = [self._context.get_doc_path_ptr()]
-                        
-                    for s in segment.get_selectors():
-                        tags = s.filter(tags)
-                        
-                    if tags == None or len(tags) == 0 or tags[0].get_parent() == None:
-                        tags = None
-                        break
-                    else:
-                        tags = [tags[0].get_parent()]
-           
-        if tags != None and len(tags) > 0:
-            self._context.set_doc_path_ptr(tags[0])
-        else:
-            log.warning(self._id, 'SkipNode: couldn\'t resolve path: {0}, line {1}'.format(path_string, self._sline.number+1))
+        # try to skip to specified tag
+        doc = self._context.get_doc()
+        cursor = self._context.get_doc_path_ptr()
+        reverse = self._direction == syntax.SkipDirection.REVERSE
+        new_cursor = xpath.skip(doc, cursor, reverse)
+        
+        if new_cursor != None:
+            self._context.set_doc_path_ptr(new_cursor)
         
     def parse(self, line_num):
         log.debug(self._id, 'SkipNode: parsing')
@@ -112,16 +79,17 @@ class SkipNode(Node):
         
         # parse path
         ep = exp_parser.ExpressionParser(self._context, line_num)
-        self._paths = ep.parse(exp)
+        self._path = ep.parse(exp)
         
         # parse direction
         direction = ep.get_stop_word()
         if direction != '':
-            validate(self._id, self._sline, direction == syntax.SkipDirection.FORWARD
+            validate(self._id, self._sline,
+                     direction == syntax.SkipDirection.FORWARD
                   or direction == syntax.SkipDirection.REVERSE,
                 'SkipNode: invalid skip direction')
             self._direction = direction
         
     def __str__(self):
-        string = syntax.OP_SKIP + syntax.WHITESPACE + str(self._paths) + syntax.WHITESPACE + self._direction
+        string = syntax.OP_SKIP + syntax.WHITESPACE + str(self._path) + syntax.WHITESPACE + self._direction
         return string 

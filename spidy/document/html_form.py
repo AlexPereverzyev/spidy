@@ -132,8 +132,8 @@ class HtmlForm(object):
             update_depth(table)
 
     def _align_table_cells(self, tag):
-        ''' 1. td tags should be inserted into parent tr, after tagrent td
-            2. tr tags should be inserted into parent table, after tagrent tr
+        ''' 1. td tags should be inserted into parent tr, after tag parent td
+            2. tr tags should be inserted into parent table, after tag parent tr
             3. after first spotted tr/td, all non-tr/td tags should be inserted before table
             4. rules applicable to both closed and open td tags '''
         
