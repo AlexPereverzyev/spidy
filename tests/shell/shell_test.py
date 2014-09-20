@@ -76,10 +76,10 @@ class ShellTest(unittest.TestCase):
                     ''')
         
     def test_get3(self):
-        ''' try get doc, error ignored, doc is not loaded '''
+        ''' try get doc, doc is not loaded, error ignored '''
         out = SS.do('''
                     get 'tests/files/doc1.txt' as xml
-                    return & == None
+                    return & == ''
                     ''')
         self.assertEqual(out, True)
         

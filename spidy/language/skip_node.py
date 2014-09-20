@@ -46,8 +46,9 @@ class SkipNode(Node):
         log.debug(self._id, 'SkipNode: evaluating')        
         
         # check document is loaded and of structured format
-        doc_type = self._context.get_doc_type()        
-        validate_eval(self._id, self._sline, doc_type != None and doc_type != DocType.UNKNOWN,
+        doc_type   = self._context.get_doc_type()
+        tried_load = (doc_type != None and doc_type != DocType.UNKNOWN)
+        validate_eval(self._id, self._sline, tried_load,
             'SkipNode: document should be loaded using {0} command'.format(syntax.OP_GET))        
         validate_eval(self._id, self._sline, doc_type != DocType.TXT,
             'SkipNode: document should be of structured format')
@@ -56,19 +57,19 @@ class SkipNode(Node):
         xpath = None
         if self._path.get_right() != None:    
             exp_string = self._path.get_right().evaluate()
-            xpath = XPath(self._id, self._sline, exp_string)
+            xpath      = XPath(self._id, self._sline, exp_string)
             
         if xpath == None or xpath.is_empty():
             return
         
         # try to skip to specified tag
-        doc = self._context.get_doc()
-        cursor = self._context.get_doc_path_ptr()
-        reverse = self._direction == syntax.SkipDirection.REVERSE
+        doc        = self._context.get_doc()
+        cursor     = self._context.get_doc_cursor()
+        reverse    = self._direction == syntax.SkipDirection.REVERSE
         new_cursor = xpath.skip(doc, cursor, reverse)
         
         if new_cursor != None:
-            self._context.set_doc_path_ptr(new_cursor)
+            self._context.set_doc_cursor(new_cursor)
         
     def parse(self, line_num):
         log.debug(self._id, 'SkipNode: parsing')

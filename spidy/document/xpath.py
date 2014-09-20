@@ -51,22 +51,19 @@ class XPath(object):
         value = None
         last = None            
         for path in self._paths:
-            for segment in path:
-                if segment.is_current():
-                    break
-                
-                if cur_tags == None:
-                    if cursor != None:
-                        cur_tags = cursor.get_children()
-                    else:
-                        cur_tags = tags
-                else:
-                    cur_tags = [c for t in cur_tags for c in t.get_children()]
-                
+            
+            # init
+            last = path[-1]    
+            if cursor != None: cur_tags = cursor.get_children()
+            else: cur_tags = tags
+            
+            # apply selectors, ignore 'current tag' ones    
+            for segment in [s for s in path if not s.is_current()]:
                 for s in segment.get_selectors():
-                    cur_tags = s.filter(cur_tags)
-                    
-            last = path[-1]
+                    cur_tags = s.filter(cur_tags)                
+                if segment != last:    
+                    cur_tags = [c for t in cur_tags for c in t.get_children()]
+            
             value = self._extract_value(cursor, cur_tags, last)
             
             if value != None:
@@ -88,24 +85,24 @@ class XPath(object):
     def skip(self, tags, cursor, reverse = False):
         ''' Skips tag tree to specified by XPath expression tag element and
             returns it. '''
-        cur_tags = None
-        for path in self._paths:        
-            for segment in path:
-                
-                if not reverse:
-                    if segment.is_current():
-                        break
-                   
-                    if cur_tags == None:
-                        if cursor != None:
-                            cur_tags = cursor.get_children()
-                        else:
-                            cur_tags = tags
-                    else:
-                        cur_tags = [c for t in cur_tags for c in t.get_children()]
-                            
+        cur_tags = None        
+        for path in self._paths:
+            
+            # init
+            last = path[-1]
+            if not reverse:
+                if cursor != None: cur_tags = cursor.get_children()
+                else: cur_tags = tags
+            else:
+                cur_tags = [cursor]
+            
+            for segment in [s for s in path if not s.is_current()]:
+                if not reverse:                    
                     for s in segment.get_selectors():
                         cur_tags = s.filter(cur_tags)
+                        
+                    if segment != last:
+                        cur_tags = [c for t in cur_tags for c in t.get_children()]
                         
                     if cur_tags == None or len(cur_tags) == 0:
                         cur_tags = None
@@ -114,9 +111,6 @@ class XPath(object):
                 else: 
                     if cursor == None:
                         break
-                        
-                    if cur_tags == None:
-                        cur_tags = [cursor]
                         
                     for s in segment.get_selectors():
                         cur_tags = s.filter(cur_tags)
@@ -136,7 +130,11 @@ class XPath(object):
          
     def _parse(self):
         ''' Parses XPath expression and returns list of paths segments
-            ready for evaluation (each path is composed of segments). '''        
+            ready for evaluation (each path is composed of segments).
+            
+            Note: thou its seems natural to reduce the result to plain list of
+                  selectors, validation can get very kinky w/o segments which
+                  carry current state. '''
         path = []    
         cur = ''    
         pi = None
@@ -292,8 +290,9 @@ class XPath(object):
             # extract single value
             tag = None
             if tags != None and len(tags) > 0:
-                tag = tags[0]
-            else: # accessing current tag
+                tag = tags[0]            
+            else:
+                # accessing current tag
                 tag = cursor
             
             if tag != None:

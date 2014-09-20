@@ -129,7 +129,7 @@ class FlattenSelector(Selector):
     ''' Transforms tag tree branch into flat list suitable for search. '''
     
     def __str__(self):
-        return '/'
+        return '//'
         
     def filter(self, tags):        
         flat = []

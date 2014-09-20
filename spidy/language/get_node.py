@@ -99,7 +99,7 @@ class GetNode(Node):
         self._context.set_doc_type(doc_loader.get_doc_type())
         self._context.set_doc_raw(doc_loader.get_doc_raw())
         self._context.set_doc(doc_loader.get_doc())        
-        self._context.set_doc_path_ptr(None)                       
+        self._context.set_doc_cursor(None)                       
         
     def parse(self, line_num):
         log.debug(self._id, 'GetNode: parsing')

@@ -39,7 +39,7 @@ class Context(object):
     _doc = None                        # parsed documnet tag tree
     _doc_type = None                   # document format
     _doc_src = None                    # specified document source
-    _doc_path_ptr = None               # pointer to the current document tree element used as eval start in path nodes
+    _doc_cursor = None                 # cursor pointing to the current document tree element
     _return = None                     # script return value is stored here
     _stack = None                      # memory allocations
     _flags = 0                         # execution flags, such as halt, break, continue
@@ -83,11 +83,11 @@ class Context(object):
     def set_doc_source(self, doc_src):
         self._doc_src = doc_src
         
-    def get_doc_path_ptr(self):
-        return self._doc_path_ptr
+    def get_doc_cursor(self):
+        return self._doc_cursor
     
-    def set_doc_path_ptr(self, doc_path_ptr):
-        self._doc_path_ptr = doc_path_ptr
+    def set_doc_cursor(self, doc_path_ptr):
+        self._doc_cursor = doc_path_ptr
         
     def get_return(self):
         return self._return

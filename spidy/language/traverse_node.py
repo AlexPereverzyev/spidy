@@ -103,7 +103,7 @@ class TraverseNode(Node):
         validate_eval(self._id, self._sline, depth >= 0, 'TraverseNode: traverse depth should be equals or greater than zero')
         
         # skip to path
-        cur_ptr = self._context.get_doc_path_ptr()
+        cur_cursor = self._context.get_doc_cursor()
         skip = SkipNode(self._context)
         skip.set_script_line(self._sline)
         skip.set_path(self._path)
@@ -112,9 +112,9 @@ class TraverseNode(Node):
         # initialize
         self._context.bind_var(self._ident)
         roots = None
-        doc_ptr = self._context.get_doc_path_ptr()
-        if doc_ptr != None:
-            roots = doc_ptr.get_children()
+        doc_cursor = self._context.get_doc_cursor()
+        if doc_cursor != None:
+            roots = doc_cursor.get_children()
         else:
             roots = doc
 
@@ -142,7 +142,7 @@ class TraverseNode(Node):
                     continue
                 box.extend(reversed(cur.get_children()))
                 
-            cur_path = cur.make_path(self._context.get_doc_path_ptr())
+            cur_path = cur.make_path(self._context.get_doc_cursor())
             self._context.set_var(self._ident, cur_path)
             self._body.evaluate()
             
@@ -154,7 +154,7 @@ class TraverseNode(Node):
                 break
             
         self._context.unbind_var(self._ident)
-        self._context.set_doc_path_ptr(cur_ptr)
+        self._context.set_doc_cursor(cur_cursor)
     
     def parse(self, line_num):
         log.debug(self._id, 'TraverseNode: parsing')

@@ -41,34 +41,36 @@ class PathNode(UnaryNode):
         if self._context.get_test():
             return self.to_metrics()    
         
-        # check document is loaded
-        doc = self._context.get_doc()
-        doc_type = self._context.get_doc_type()
-        if doc == None and doc_type != None and doc_type != DocType.UNKNOWN:
-            return None        
-        validate_eval(self._id, self._sline, doc != None,
+        # check document is at least tried to load
+        doc         = self._context.get_doc()
+        doc_type    = self._context.get_doc_type()
+        tried_load  = (doc_type != None and doc_type != DocType.UNKNOWN)
+        validate_eval(self._id, self._sline, tried_load,
             'PathNode: document should be loaded using {0} command'.format(syntax.OP_GET))
         
         # try to parse path
         xpath = None        
         if self._right != None:
             exp_string = self._right.evaluate()
-            xpath = XPath(self._id, self._sline, exp_string)
+            xpath      = XPath(self._id, self._sline, exp_string)
         
         # if path is not empty - evaluate it
-        if xpath != None and not xpath.is_empty():
+        if xpath != None and not xpath.is_empty():            
             validate_eval(self._id, self._sline, doc_type != DocType.TXT,
                 'PathNode: unstructured documents can\'t be traversed')
-            
-            cursor = self._context.get_doc_path_ptr()
+            # return empty if failed to load
+            if doc == None:
+                if xpath.get_path()[-1].is_single(): return ''
+                else: return []            
+            cursor = self._context.get_doc_cursor()
             value = xpath.apply(doc, cursor)            
             return value
 
         # otherwise return the whole document's contents
         else:
-            doc_raw = self._context.get_doc_raw()            
-            validate_eval(self._id, self._sline, doc_raw != None,
-                'PathNode: document should be loaded using {0} command'.format(syntax.OP_GET))
+            doc_raw = self._context.get_doc_raw()
+            if doc_raw == None or doc_raw == u'empty':
+                return ''
             return doc_raw
     
     def __str__(self):
