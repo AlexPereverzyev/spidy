@@ -18,6 +18,7 @@ Contents
     scraping/templating
     scraping/json
     architecture/shell
+    news
         
 Appendix
 ========

@@ -88,3 +88,20 @@ table row template.
 The example's templates may look too simple for ``merge`` command to be effective.
 But look further - how about adding CSS or JavaScript event handlers to the table?
 I think you've got the idea.
+
+Getting More from Strings
+=========================
+
+If getting plain strings from Web pages is not enough, you may want to consider
+using regular expressions to extract exactly the part of string you are interested
+in. Fortunately starting from v0.1.1 Spidy supports regular expressions via special
+operator - ``%``. It accepts two arguments and returns results of capturing groups,
+e.g.::
+
+    r = '2x2=4' % '([0-9]+)'
+    
+evaluates to::
+
+    ['2', '2', '4']
+    
+See :ref:`syntax` for more details and examples.

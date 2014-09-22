@@ -61,6 +61,7 @@ OP_PUSH = '<<'
 OP_POP = '>>'
 OP_MERGE = 'merge'
 OP_LOG = 'log'
+OP_REGEX = '%'
 
 MARK_UNARY = 'u'
 
@@ -77,7 +78,7 @@ class SkipDirection:
 # operators precedence 
 OPS_PREC            = { OP_INDEXER:12,
                         OP_POP:11, OP_PUSH:11, OP_PATH:11,
-                        OP_UNARY_MINUS:10, OP_UNARY_PLUS:10, OP_CONVERT_TO_NUM:10, OP_CONVERT_TO_STR:10,
+                        OP_UNARY_MINUS:10, OP_UNARY_PLUS:10, OP_CONVERT_TO_NUM:10, OP_CONVERT_TO_STR:10, OP_REGEX:10,
                         OP_PLUS:6, OP_MINUS:7, OP_MULT:8, OP_DIVIDE:9,
                         OP_EQUALS:5, OP_NOT_EQUALS:5, OP_LESS:5, OP_LESS_OR_EQUALS:5, OP_GREATER:5, OP_GREATER_OR_EQUALS:5,
                         OP_OR:1, OP_AND:2, OP_NOT:3, OP_IN:4,
@@ -117,7 +118,7 @@ IDENTITY_PATTERN    = re.compile('^(?!({0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{
 
 # regex to perform operator matching
 OPERATOR_PATTERN = re.compile(
-    '{0}({1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{25}){0}|({9}(?!{9})|{10}(?!{9}|{10})|{11}(?!{9}|{11})|{12}|{13}|{14}|{15}|{16}|{17}|\{18}|\{19}|\{20}|{21}(?!{21})|\{22}|{23}|\{24})(?!$)'
+    '{0}({1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{25}){0}|({9}(?!{9})|{10}(?!{9}|{10})|{11}(?!{9}|{11})|{12}|{13}|{14}|{15}|{16}|{17}|\{18}|\{19}|\{20}|{21}(?!{21})|\{22}|{23}|\{24}|{26})(?!$)'
         .format(
             '[{0}{1}\{2}{3}{4}{5}{6}\{7}\{8}\{10}{11}\{12}\{9}]'
                 .format(
@@ -135,7 +136,7 @@ OPERATOR_PATTERN = re.compile(
             OP_EQUALS, OP_NOT_EQUALS, OP_LESS_OR_EQUALS, OP_GREATER_OR_EQUALS,
             OP_PLUS, OP_MINUS, OP_MULT, OP_DIVIDE,
             OP_PATH, OP_CONVERT_TO_NUM, OP_CONVERT_TO_STR,
-            OP_IN))
+            OP_IN, OP_REGEX))
 
 def to_unary(operator):
     ''' Marks operator as unary for consistant precedence (only for + and -). '''

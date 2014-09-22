@@ -74,7 +74,8 @@ Spidy Operators
 ===============
 
 Spidy syntax supports all basic arithmetic, logical and comparison 
-operators. The table below describe operators precedence:
+operators as well as some custom ones, e.g.: XPath ``&`` or ``%`` regex.
+The table below describe operators precedence:
 
 ================ ==============
     Operator       Precedence 
@@ -83,7 +84,7 @@ operators. The table below describe operators precedence:
 ---------------- --------------
   >>, <<, &            12
 ---------------- --------------
-  -x, +x, $, #         11
+-x, +x, $, #, %        11
 ---------------- --------------
   /                    10
 ---------------- -------------- 
@@ -151,6 +152,11 @@ XPath
 -----
 
 .. autoclass:: spidy.language.path_node.PathNode
+
+Regex
+-----
+
+.. autoclass:: spidy.language.regex_node.RegexNode
 
 Comments
 --------
@@ -224,7 +230,7 @@ e.g.: string, bool are omitted::
                      | e "<" e | e "<=" e  | e "=="  e | e "!=" e
                      | e ">" e | e ">=" e 
                      | "not" e | e "or" e  | e "and" e | e "in" e
-                     |  path   |  "#" e    | "$" e     | 
+                     |  path   |  "#" e    | "$" e     | e "%"  e
                      | indexer 
                      |(indexer | identity) = e         
                      |(indexer | list) << e 

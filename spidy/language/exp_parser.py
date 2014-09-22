@@ -9,11 +9,8 @@ from syntax import *
 from spidy.common import *
 from spidy.common.sniff import *
 
+from node_factory import * 
 from nodes import *
-from set_node import SetNode
-from pop_node import PopNode
-from push_node import PushNode
-from path_node import PathNode
 
 def parse_expression(context, lnum, expression):
     ''' Parses Spidy expression from string and builds syntax tree ready for evaluation. '''
@@ -325,72 +322,44 @@ class ExpressionParser(object):
                      or is_logical(self._cur.get_op()),
                 'ExpressionParser: invalid \'' + operator + '\' operator syntax')
             
-            node = None
-            if operator == OP_PATH:
-                node = PathNode(self._context)
-            else:
-                node = UnaryNode(self._context)
-            node.set_op(
-                to_unary(operator))
+            node = make_unary_node(operator, self._context, self._lnum)
             
+        # otherwise - make binary node
         else:        
-            if operator == OP_SET:
-                node = SetNode(self._context)
-            elif operator == OP_POP:
-                node = PopNode(self._context)
-            elif operator == OP_PUSH:
-                node = PushNode(self._context)
-            elif operator == OP_LIST:
-                node = ListNode(self._context)
-            else:
-                node = BinaryNode(self._context)
-            if operator != OP_LIST:
-                node.set_op(operator)
-        node.parse(self._lnum)
-        return node
-    
-    def _make_value_node(self, value):        
-        validate(self._id, self._sline,
-            WHITESPACE not in value or is_string_const(value),
-            'ExpressionParser: invalid syntax or whitespace in value or name')
-        
-        node = None
-        if is_none(value):
-            node = NoneNode(self._context)
-        elif is_bool_const(value):
-            node = BoolNode(self._context)
-        elif is_string_const(value):
-            node = StringNode(self._context)
-        elif is_number_const(value):
-            node = NumberNode(self._context)        
-        elif is_var_name(value):
-            node = VarNode(self._context)     
-        if node != None:
-            node.set_value(value)
-            node.parse(self._lnum)
+            node = make_binary_node(operator, self._context, self._lnum)
         return node
     
     def _try_set_left(self, node, value):
         if isinstance(node, ListNode):
-            validate(self._id, self._sline, value == '', 'ExpressionParser: invalid syntax')
+            validate(self._id, self._sline, value == '',
+                'ExpressionParser: invalid syntax')
         elif isinstance(node, BinaryNode):
-            validate(self._id, self._sline, value != '', 'ExpressionParser: invalid syntax')
-            vn = self._make_value_node(value)
+            validate(self._id, self._sline, value != '',
+                'ExpressionParser: invalid syntax')
+            validate(self._id, self._sline, WHITESPACE not in value or is_string_const(value),
+                'ExpressionParser: invalid syntax or whitespace in value or name')
+            vn = make_value_node(value, self._context, self._lnum)
             node.set_left(vn)
         
     def _try_set_right(self, node, value):
         if isinstance(node, ListNode):
-            validate(self._id, self._sline, value == '', 'ExpressionParser: invalid syntax')
+            validate(self._id, self._sline, value == '',
+                'ExpressionParser: invalid syntax')
         elif isinstance(node, UnaryNode) and node.get_right() == None:
-            validate(self._id, self._sline, value != '' or is_incomplete(node.get_op()), 'ExpressionParser: invalid syntax')
-            vn = self._make_value_node(value)
+            validate(self._id, self._sline, value != '' or is_incomplete(node.get_op()),
+                'ExpressionParser: invalid syntax')
+            validate(self._id, self._sline, WHITESPACE not in value or is_string_const(value),
+                'ExpressionParser: invalid syntax or whitespace in value or name')
+            vn = make_value_node(value, self._context, self._lnum)
             node.set_right(vn)
             
     def _complete_cur(self, value):        
         if self._cur != None:
             self._try_set_right(self._cur, value)
         else:
-            self._cur = self._make_value_node(value)        
+            validate(self._id, self._sline, WHITESPACE not in value or is_string_const(value),
+                'ExpressionParser: invalid syntax or whitespace in value or name')
+            self._cur = make_value_node(value, self._context, self._lnum)        
         if self._root == None:
             self._root = self._cur
 
@@ -401,6 +370,8 @@ def _is_value(node):
     return isinstance(node, ValueNode)
 
 def _is_not_complete(node):
+    ''' Returns True if specified unary or binary node is not complete -
+        has its right leaf not set. '''
     result = (not isinstance(node, ListNode)
               and not isinstance(node, ValueNode)
               and (node == None or node.get_right() == None))

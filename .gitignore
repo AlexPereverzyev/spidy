@@ -5,3 +5,4 @@ dist
 MANIFEST
 examples/*.html
 _build
+tests.py

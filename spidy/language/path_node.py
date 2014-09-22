@@ -69,8 +69,8 @@ class PathNode(UnaryNode):
         # otherwise return the whole document's contents
         else:
             doc_raw = self._context.get_doc_raw()
-            if doc_raw == None or doc_raw == u'empty':
-                return ''
+            if doc_raw == u'empty':
+                return None
             return doc_raw
     
     def __str__(self):
