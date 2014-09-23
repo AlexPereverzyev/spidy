@@ -52,10 +52,11 @@ class XPath(object):
         last = None            
         for path in self._paths:
             
-            # init
-            last = path[-1]    
-            if cursor != None: cur_tags = cursor.get_children()
-            else: cur_tags = tags
+            # init, dont select any tags, if accessing current one
+            last = path[-1]
+            if not last.is_current():
+                if cursor != None: cur_tags = cursor.get_children()
+                else: cur_tags = tags
             
             # apply selectors, ignore 'current tag' ones    
             for segment in [s for s in path if not s.is_current()]:
@@ -88,9 +89,9 @@ class XPath(object):
         cur_tags = None        
         for path in self._paths:
             
-            # init
+            # init, dont select any tags, if accessing current one
             last = path[-1]
-            if not reverse:
+            if not reverse and not last.is_current():
                 if cursor != None: cur_tags = cursor.get_children()
                 else: cur_tags = tags
             else:
@@ -213,7 +214,7 @@ class XPath(object):
                     pi.add_selector(IndexSelector(int(cur)))
                     s = XP_UNDEFINED
                     if not pi.has_attr():
-                        s |= XP_SEEK_ATTR                                
+                        s |= XP_SEEK_ATTR
                     
                 elif s & XP_SEEK_ATTR_MATCH:
                     pi.add_selector(AttributeValueSelector(cur))
@@ -264,7 +265,7 @@ class XPath(object):
                 cur += c
                 
                 # if path starts from word char (not slash) - add implicit search
-                if pi == None and len(path) == 0:
+                if pi == None and len(path) == 0 and c != '.':
                     pi = Segment()
                     pi.add_selector(FlattenSelector())
                 
@@ -277,12 +278,15 @@ class XPath(object):
     
         validate(self._id, self._sline, not s & XP_START_NEW, 'XPath: invalid syntax')
         validate(self._id, self._sline, len(self._paths) > 0, 'XPath: path expression should be specified')
+        
         for p in self._paths:        
             if len(p) > 0:
                 for pi in p[:-1]:
                     validate(self._id, self._sline, pi.get_attr() == None, 'XPath: only last path segment can specify attribute selector')
-                for pi in p:        
-                    validate(self._id, self._sline, pi.has_name(), 'XPath: only one current tag selector is allowed')
+                cs = 0
+                for pi in p:
+                    cs += pi.is_current()
+                validate(self._id, self._sline, cs <= 1, 'XPath: only one current tag selector is allowed')
     
     def _complete_path(self, path, segment, cur, state):
         c = cur.strip()

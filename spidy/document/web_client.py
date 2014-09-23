@@ -50,7 +50,11 @@ class WebClient(object):
 
             # get the document
             try:
-                conn = httplib.HTTPSConnection(domain)
+                conn = None
+                if WEB_HTTPS in schema.lower():
+                    conn = httplib.HTTPSConnection(domain)
+                else:
+                    conn = httplib.HTTPConnection(domain)
                 conn.request(WEB_GET, path, headers = rq_headers)
                 resp = conn.getresponse()
                 
