@@ -6,7 +6,7 @@ setup(
     version=open('spidy/VERSION').read().strip(),
     description='Spidy scripting language for Web scraping',
     long_description = open('README.rst').read(),
-    url='http://www.python.org/',
+    url='https://github.com/alexpereverzyev/spidy',
     author='Spidy developers',
     maintainer='Alex Pereverzyev',
     maintainer_email='pereverzev.alex@gmail.com',
@@ -19,7 +19,7 @@ setup(
     classifiers = [
         'Environment :: Console',
         'Environment :: Web Environment',
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',

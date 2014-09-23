@@ -94,7 +94,7 @@ Getting More from Strings
 
 If getting plain strings from Web pages is not enough, you may want to consider
 using regular expressions to extract exactly the part of string you are interested
-in. Fortunately starting from v0.1.1 Spidy supports regular expressions via special
+in. Fortunately starting from v0.2 Spidy supports regular expressions via special
 operator - ``%``. It accepts two arguments and returns results of capturing groups,
 e.g.::
 

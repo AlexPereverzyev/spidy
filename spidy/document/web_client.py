@@ -47,14 +47,10 @@ class WebClient(object):
             schema = m.group(1)
             domain = m.group(2)
             path = m.group(3)
-            
-            if schema.lower().startswith(WEB_HTTPS):
-                if conn != None: conn.close()
-                raise WebException('WebClient: Sorry, HTTPS is not supported yet')
 
             # get the document
             try:
-                conn = httplib.HTTPConnection(domain)
+                conn = httplib.HTTPSConnection(domain)
                 conn.request(WEB_GET, path, headers = rq_headers)
                 resp = conn.getresponse()
                 

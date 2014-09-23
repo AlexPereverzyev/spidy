@@ -95,8 +95,6 @@ script returns HTML page. Article links will be appended to the variable.
 **Lines 7, 8** - we load GNews main page with the same header as my browser has.
 Your browser and corresponding user agent header might be different.
 
-.. note:: HTTPS is not supported yet :(
-
 **Line 11** - ``traverse`` helps to traverse structured documents. In it's basic
 form it accepts path to container and enumerates it's direct children XPaths -
 `div` variable. See more about it in :ref:`syntax`.

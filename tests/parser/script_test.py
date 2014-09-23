@@ -50,3 +50,26 @@ else:
 		X-State: x
 return i
 ''')
+	
+    def test_script3(self):
+	context = Context()
+	sn = parse_inline(
+'''
+if (True):
+    // standard header comment
+    for c in [1,2,3]: // -- inline comments are OK
+        x = 1
+    
+    lst = [1,
+        //2, -- comments inside of multiline statements
+	
+        'parenthesis(in string[ are ignored',	
+    3]
+''', context)
+	script_text = str(sn)
+	self.assertEqual(script_text,
+'''if True:
+	for c in [1, 2, 3]:
+		x = 1
+	lst = [1, 'parenthesis(in string[ are ignored', 3]
+''')

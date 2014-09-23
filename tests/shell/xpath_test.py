@@ -10,7 +10,7 @@ class XPathTest(unittest.TestCase):
         ''' & get value '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    x = &'root/div/span[1]/'
+                    x = &'/root/div/span[1]/'
                     return x
                     ''')
         self.assertEqual(out, 'apple')
@@ -19,7 +19,7 @@ class XPathTest(unittest.TestCase):
         ''' & get value wrong path '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    x = &'root/div/h[1]/'
+                    x = &'/root/div/h[1]/'
                     return x
                     ''')
         self.assertEqual(out, '')
@@ -28,7 +28,7 @@ class XPathTest(unittest.TestCase):
         ''' & get attribute '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    x = &'root/div/span@name[1]'
+                    x = &'/root/div/span@name[1]'
                     return x
                     ''')
         self.assertEqual(out, 'first')
@@ -37,7 +37,7 @@ class XPathTest(unittest.TestCase):
         ''' & get attribute, wrong name '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    x = &'root/div/span[1]@wrong'
+                    x = &'/root/div/span[1]@wrong'
                     return x
                     ''')
         self.assertEqual(out, '')
@@ -47,7 +47,7 @@ class XPathTest(unittest.TestCase):
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    x = &'root/div@missplaced/span[1]@wrong'
+                    x = &'/root/div@missplaced/span[1]@wrong'
                     return x
                     ''')
         
@@ -55,7 +55,7 @@ class XPathTest(unittest.TestCase):
         ''' & get value, no document '''
         self.assertRaises(EvaluationException, SS.do,
                     '''
-                    x = &'root/div'
+                    x = &'/root/div'
                     return x
                     ''')
         
@@ -79,7 +79,7 @@ class XPathTest(unittest.TestCase):
         ''' & get current path pointer value '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    skip &'root/div/span[1]'
+                    skip &'/root/div/span[1]'
                     return &'.'
                     ''')
         self.assertEqual(out, 'apple')
@@ -88,7 +88,7 @@ class XPathTest(unittest.TestCase):
         ''' & get current path pointer attribute value '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    skip &'root/div/span'
+                    skip &'/root/div/span'
                     return &'.@name'
                     ''')
         self.assertEqual(out, 'first')
@@ -97,7 +97,7 @@ class XPathTest(unittest.TestCase):
         ''' & get current path pointer attribute value, wrong name '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    skip &'root/div/span[1]'
+                    skip &'/root/div/span[1]'
                     return &'.@wrong'
                     ''')
         self.assertEqual(out, '')
@@ -106,7 +106,7 @@ class XPathTest(unittest.TestCase):
         ''' & get attribute value after index selector '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[2]@name'
+                    return &'/root/div[1]/span[2]@name'
                     ''')
         self.assertEqual(out, 'second')
         
@@ -114,7 +114,7 @@ class XPathTest(unittest.TestCase):
         ''' & simple attribute selector '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark][1]'
+                    return &'/root/div[1]/span[@mark][1]'
                     ''')
         self.assertEqual(out, 'orange')
         
@@ -122,7 +122,7 @@ class XPathTest(unittest.TestCase):
         ''' & simple attribute selector w/ attr value'''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark=xxx][1]'
+                    return &'/root/div[1]/span[@mark=xxx][1]'
                     ''')
         self.assertEqual(out, 'orange')
         
@@ -130,7 +130,7 @@ class XPathTest(unittest.TestCase):
         ''' & simple attribute selector w/ empty attr value'''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark=][1]'
+                    return &'/root/div[1]/span[@mark=][1]'
                     ''')
         self.assertEqual(out, '')
     
@@ -138,7 +138,7 @@ class XPathTest(unittest.TestCase):
         ''' & attribute selector w/ index selector '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark][1]'
+                    return &'/root/div[1]/span[@mark][1]'
                     ''')
         self.assertEqual(out, 'orange')
         
@@ -147,7 +147,7 @@ class XPathTest(unittest.TestCase):
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark][1][2]'
+                    return &'/root/div[1]/span[@mark][1][2]'
                     ''')
     
     def test_path17(self):
@@ -155,7 +155,7 @@ class XPathTest(unittest.TestCase):
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@mark][@tick]'
+                    return &'/root/div[1]/span[@mark][@tick]'
                     ''')
         
     def test_path18(self):
@@ -163,14 +163,14 @@ class XPathTest(unittest.TestCase):
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[@@mark]'
+                    return &'/root/div[1]/span[@@mark]'
                     ''')
         
     def test_path19(self):
         ''' & get attribute value after index selector w/ attribute selector '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[1]/span[2]@name[@mark]'
+                    return &'/root/div[1]/span[2]@name[@mark]'
                     ''')
         self.assertEqual(out, 'second')
         
@@ -178,7 +178,7 @@ class XPathTest(unittest.TestCase):
         ''' & get value, attribute selector in the mid of the path '''
         out = SS.do('''
                     get 'tests/files/doc2.xml'
-                    return &'root/div/table/span[@class=label]/div[2]'
+                    return &'/root/div/table/span[@class=label]/div[2]'
                     ''')
         self.assertEqual(out, '2')
         
@@ -267,30 +267,30 @@ class XPathTest(unittest.TestCase):
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'|root/div/span[1]'
+                    return &'|/root/div/span[1]'
                     ''')
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/span|'
+                    return &'/root/div/span|'
                     ''')
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[@name=|]/span[1]'
+                    return &'/root/div[@name=|]/span[1]'
                     ''')
         
         self.assertRaises(ParsingException, SS.do,
                     '''
                     get 'tests/files/doc1.xml'
-                    return &'root/div[|@name]/span'
+                    return &'/root/div[|@name]/span'
                     ''')
         
     def test_path32(self):
         ''' & get value using alternate path, second works  '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/p[1]|root/div/span[1]'
+                    return &'/root/div/p[1]|root/div/span[1]'
                     ''')
         self.assertEqual(out, 'apple')
         
@@ -298,7 +298,7 @@ class XPathTest(unittest.TestCase):
         ''' & get value using alternate path, both work, returns first  '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/span[@name][1]|root/p[1]'
+                    return &'/root/div/span[@name][1]|root/p[1]'
                     ''')
         self.assertEqual(out, 'apple')
         
@@ -306,7 +306,7 @@ class XPathTest(unittest.TestCase):
         ''' & skip to and get value using alternate path, third works '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    skip &'//table|/div/span[@name]|root/div/span[2]'
+                    skip &'//table|/div/span[@name]|/root/div/span[2]'
                     return &'.'                    
                     ''')
         self.assertEqual(out, 'orange')
@@ -315,7 +315,7 @@ class XPathTest(unittest.TestCase):
         ''' & select all names with one expression '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/span'       
+                    return &'/root/div/span'       
                     ''')
         self.assertEqual(out, ['apple', 'orange', 'mango'])
         
@@ -323,7 +323,7 @@ class XPathTest(unittest.TestCase):
         ''' & select all attribute values with one expression '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/span@name'
+                    return &'/root/div/span@name'
                     ''')
         self.assertEqual(out, ['first', 'second', 'third'])
                 
@@ -332,7 +332,7 @@ class XPathTest(unittest.TestCase):
         out = SS.do('''
                     get 'tests/files/doc1.xml'
                     r = ''
-                    for v in &'root/div/span':
+                    for v in &'/root/div/span':
                         r = r + v + '\n'
                     return r
                     ''')
@@ -342,6 +342,22 @@ class XPathTest(unittest.TestCase):
         ''' & empty results returns as empty list '''
         out = SS.do('''
                     get 'tests/files/doc1.xml'
-                    return &'root/div/meta'                    
+                    return &'/root/div/meta'                    
                     ''')
         self.assertEqual(out, [])
+        
+    def test_path39(self):
+        ''' document is searched for the tag name, if path starts from word char (not slash)'''
+        out = SS.do('''
+                    get 'tests/files/doc1.xml'
+                    return &'span/'
+                    ''')
+        self.assertEqual(out, ['apple', 'orange', 'mango'])
+        
+    def test_path40(self):
+        ''' get children tags after implicit search '''
+        out = SS.do('''
+                    get 'tests/files/doc1.xml'
+                    return &'div/span[2]'
+                    ''')
+        self.assertEqual(out, 'orange')

@@ -29,6 +29,8 @@ class PathNode(UnaryNode):
     
     - children selector: ``/``
     - self plus all descendants selector: ``//``
+    - implicit self plus all descendants selector, if path starts from word
+      character, e.g.: ``span[1]``
     - name selector, 'any' and 'current' wildcards: ``/div`` or ``/*`` or ``.``
     - index selector: ``/div[2]``
     - attribute and/or it's value selector: ``/div[@class]`` or ``/div[@class=header]``

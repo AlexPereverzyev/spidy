@@ -26,6 +26,7 @@ Appendix
 .. toctree::
 
     architecture/overview
+    scripting/general
     scripting/syntax    
     references
     contacts

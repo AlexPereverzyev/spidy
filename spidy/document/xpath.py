@@ -129,8 +129,9 @@ class XPath(object):
             return None
          
     def _parse(self):
-        ''' Parses XPath expression and returns list of paths segments
-            ready for evaluation (each path is composed of segments).
+        ''' Parses XPath expression and returns list of paths segments ready for
+            evaluation (each path is composed of segments). Implemented as
+            deterministic state machine.
             
             Note: thou its seems natural to reduce the result to plain list of
                   selectors, validation can get very kinky w/o segments which
@@ -144,6 +145,7 @@ class XPath(object):
         
         for c in self._exp_string:        
             i += 1
+            # reading strings inside of path expressions (next three ifs)
             if c in XP_STRING and not s & XP_READ_STRING:
                 validate(self._id, self._sline, s == XP_SEEK_CLOSURE, 'XPath: invalid syntax')
                 s |= XP_READ_STRING
@@ -172,10 +174,11 @@ class XPath(object):
                 s = XP_SEEK_NAME | XP_START_NEW
                     
             elif c == '/':
+                # finish current, start new segment
                 if pi == None and cur != '': pi = Segment()
                 if pi != None and not s & XP_SEEK_SEARCH:
                     self._complete_path(path, pi, cur, s)
-                
+                                    
                 if not s & XP_SEEK_SEARCH:
                     pi = Segment()
                     s = XP_SEEK_NAME | XP_SEEK_SEARCH
@@ -252,11 +255,18 @@ class XPath(object):
                 cur = ''
                 
             elif c != ' ' and c != '\t':
+                # dont allow current tag references in search or double wildcards
                 validate(self._id, self._sline,
                     not (c == '.' and pi != None and pi.has_search())
                     and not ('.' in cur or '*' in cur), 'XPath: invalid syntax')
+                
                 s &= ~XP_SEEK_SEARCH
-                cur += c            
+                cur += c
+                
+                # if path starts from word char (not slash) - add implicit search
+                if pi == None and len(path) == 0:
+                    pi = Segment()
+                    pi.add_selector(FlattenSelector())
                 
         if cur != '' or not s & XP_SEEK_NAME:
             if pi == None: pi = Segment()

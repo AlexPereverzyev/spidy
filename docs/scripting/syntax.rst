@@ -4,11 +4,6 @@
 Syntax Reference
 ================
 
-Spidy is a dynamic single-context scripting language written in Python.
-It borrows certain syntax specifics, like indentation, from Python, because
-of it's clearness and simplicity and adds a few statements and operators
-useful for Web scraping.
-
 This documents describes Spidy language syntax, statements and operators.
 
 Spidy Commands

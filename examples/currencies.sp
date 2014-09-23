@@ -3,8 +3,18 @@
 // javascript - off
 
 agent   = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0'
-reuters = ['http://www.reuters.com/finance/global-market-data', 'Reuters', '//table[@id="currPairs"]/tbody[1]', '//a[1]', '/td[2]']
-yahoo   = ['http://finance.yahoo.com/currency-investing', 'Yahoo Finance', '//table[@id="flat-rates-table"]/tbody[1]', '//a[@class="currency-link"][1]', '/td[2]']
+reuters = ['http://www.reuters.com/finance/global-market-data',
+           'Reuters',
+           '//table[@id="currPairs"]/tbody[1]',
+           '//a[1]',
+           '/td[2]']
+           
+yahoo   = ['http://finance.yahoo.com/currency-investing',
+          'Yahoo Finance',
+          '//table[@id="flat-rates-table"]/tbody[1]',
+          '//a[@class="currency-link"][1]',
+          '/td[2]']
+          
 sources = [reuters, yahoo]
 markup  = ''
 
