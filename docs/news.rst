@@ -4,7 +4,7 @@
 Relesase Notes
 ==============
 
-0.2 alpha (xx-xx-2014)
+0.2 beta (27-09-2014)
 ======================
 
 - added regex operator ``%`` for strings parsing

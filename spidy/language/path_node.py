@@ -61,9 +61,7 @@ class PathNode(UnaryNode):
             validate_eval(self._id, self._sline, doc_type != DocType.TXT,
                 'PathNode: unstructured documents can\'t be traversed')
             # return empty if failed to load
-            if doc == None:
-                if xpath.get_path()[-1].is_single(): return ''
-                else: return []            
+            if doc == None: return ''          
             cursor = self._context.get_doc_cursor()
             value = xpath.apply(doc, cursor)            
             return value

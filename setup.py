@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
     name='Spidy',
     version=open('spidy/VERSION').read().strip(),
-    description='Spidy scripting language for Web scraping',
+    description='Spidy - Web scraping simplified!',
     long_description = open('README.rst').read(),
     url='https://github.com/alexpereverzyev/spidy',
     author='Spidy developers',

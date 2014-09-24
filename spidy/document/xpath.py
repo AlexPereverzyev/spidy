@@ -45,8 +45,8 @@ class XPath(object):
         return self._paths
     
     def apply(self, tags, cursor):
-        ''' Applies XPath expression to supplied tag tree and returns value. '''
-        
+        ''' Applies XPath expression to supplied tag tree and returns value. '''        
+        if tags == None: return ''        
         cur_tags = None
         value = None
         last = None            
@@ -86,6 +86,7 @@ class XPath(object):
     def skip(self, tags, cursor, reverse = False):
         ''' Skips tag tree to specified by XPath expression tag element and
             returns it. '''
+        if tags == None: return None            
         cur_tags = None        
         for path in self._paths:
             
