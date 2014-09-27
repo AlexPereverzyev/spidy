@@ -30,6 +30,7 @@ def run(script_file, out_file = None, log_file = None, log_level = 20):
             with codecs.open(out_file, 'w', 'UTF8') as f:
                 f.write(output)
             log.info(id, 'Spidy: finished writing output: {0}'.format(out_file))
+            output = ''
             
     except Exception as e:
         log.critical(id, "Spidy: failed to execute script: {0}".format(script_file))
@@ -57,6 +58,7 @@ def do(script, out_file = None, log_file = None, log_level = 20):
             with codecs.open(out_file, 'w', 'UTF8') as f:
                 f.write(output)
             log.info(id, 'Spidy: finished writing output: {0}'.format(out_file))
+            output = ''
     
     except Exception as e:
         log.critical(id, "Spidy: failed to execute script: {0}".format(script_name))
