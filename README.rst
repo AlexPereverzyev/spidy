@@ -5,8 +5,8 @@ Spidy
 .. image:: https://badge.fury.io/py/Spidy.png
    :target: http://badge.fury.io/py/Spidy
 
-.. image:: https://travis-ci.org/alexpereverzyev/spidy.svg
-   :target: https://travis-ci.org/alexpereverzyev/spidy
+.. image:: https://travis-ci.org/AlexPereverzyev/spidy.svg
+   :target: https://travis-ci.org/AlexPereverzyev/spidy
 
 Overview
 ========
@@ -21,7 +21,7 @@ allow to reference arbitrary document on the Web, Spidy goes one step further
 to allow to referencing arbitrary piece of data with just a few lines of script,
 which is easy to create, distribute and understand.
 
-Here are major features the package offers::
+Here are major features the package offers:
 
 * Flexibility of scripting language
 * XPath selectors to extract data
